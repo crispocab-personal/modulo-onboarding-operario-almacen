@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Onboarding operario · Prototipo</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- Índice para presentar: fuera del marco del móvil, no forma parte del producto -->
+  <aside class="indice" id="indice" aria-label="Índice del prototipo">
+    <div class="indice__cabecera">
+      <p class="indice__producto">Módulo de onboarding · operario de almacén</p>
+      <p class="indice__subtitulo">Prototipo navegable (HTML). Referencia: Figma, página <em>Prototipo</em>.</p>
+      <div class="interruptores">
+        <label class="interruptor" title="Pitido de acierto y sonido de error.">
+          <input type="checkbox" id="sonido" checked>
+          <span class="interruptor__pista" aria-hidden="true"></span>
+          <span>Sonido</span>
+        </label>
+        <label class="interruptor" title="Activado, la lectura y el acierto avanzan solos (1,6 s y 0,9 s), como en Figma. Desactivado, esperan a que se toque el visor o se pulse Intro.">
+          <input type="checkbox" id="avance-auto" checked aria-describedby="avance-auto-ayuda">
+          <span class="interruptor__pista" aria-hidden="true"></span>
+          <span>Avance automático</span>
+        </label>
+      </div>
+      <p class="indice__subtitulo indice__atajo"><kbd>F5</kbd> vuelve al inicio del flujo completo correcto.</p>
+      <p class="solo-lector" id="avance-auto-ayuda">Activado, la lectura y el acierto avanzan solos (1,6 s y 0,9 s), como en Figma. Desactivado, esperan a que se toque el visor o se pulse Intro.</p>
+      <a class="indice__volver" href="#/" id="volver-al-prototipo">Volver al prototipo</a>
+    </div>
+
+    <nav aria-labelledby="titulo-accesos">
+      <h2 class="indice__h2" id="titulo-accesos">Accesos directos</h2>
+      <ol class="accesos" id="accesos"></ol>
+    </nav>
+
+    <nav aria-labelledby="titulo-pantallas">
+      <h2 class="indice__h2" id="titulo-pantallas">Todas las pantallas</h2>
+      <div id="lista-pantallas"></div>
+    </nav>
+
+    <footer class="indice__pie">
+      <p>Fotos de cámara: Pexels, licencia gratuita. Estantería: cottonbro studio (7018662). Etiqueta de
+        prenda: Pexels (7441481). Carros: ramazan karaoglanoglu (31266794).</p>
+      <p>Foto del avatar: imagen de Freepik (Magnific, 12445468), licencia gratuita con atribución.</p>
+      <p>En iPhone con el interruptor de silencio activado, el pitido puede no sonar.</p>
+    </footer>
+  </aside>
+
+  <main class="escenario" id="escenario">
+    <!-- En móvil: tira discreta del presentador, fuera de la pantalla del producto -->
+    <div class="barra-presentador">
+      <a href="#/indice" class="barra-presentador__boton">Índice</a>
+      <span class="barra-presentador__nombre" id="nombre-movil"></span>
+    </div>
+
+    <div class="marco-escala" id="marco-escala">
+      <div class="marco" id="marco" data-figma="Prototipo"></div>
+    </div>
+
+    <p class="nombre-pantalla" id="nombre-pantalla" aria-hidden="true"></p>
+    <div class="aviso-prototipo" id="aviso-prototipo" role="status" aria-live="polite"></div>
+    <div class="aviso-prototipo aviso-prototipo--pista" id="pista-visor" aria-hidden="true"></div>
+  </main>
+</div>
+
+<!-- Anuncios para lector de pantalla de los cambios que pasan solos -->
+<div class="solo-lector" id="anuncio" aria-live="polite" aria-atomic="true"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
