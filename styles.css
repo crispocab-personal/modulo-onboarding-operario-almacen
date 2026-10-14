@@ -622,13 +622,6 @@ html.compacto .aviso-prototipo--pista {
 }
 .text-input__campo:focus-within .text-input__valor { padding-top: 18px; }
 
-/* Ayuda del atajo F5 en el índice */
-.indice__atajo { margin-top: 8px; }
-.indice__atajo kbd {
-  font: inherit; font-weight: 600; color: var(--neutral-500); padding: 0 4px;
-  border: 1px solid var(--neutral-300); border-radius: 2px; background: var(--neutral-100);
-}
-
 /* Escritorio: el prototipo va dentro de un dispositivo móvil (pieza de presentación, fuera del producto).
    La pantalla mide 360 × 600, como los marcos de Figma; el cuerpo añade 12 px a los lados y 40 arriba y
    abajo. En pantalla completa (móvil o ventana pequeña: html.compacto) no hay dispositivo: se ve tal cual. */
@@ -646,3 +639,30 @@ html:not(.compacto) .marco-escala::after {
   width: 112px; height: 5px; border-radius: 100px; background: var(--neutral-400);
 }
 html:not(.compacto) .marco { outline: 0; border-radius: 4px; }
+
+/* Índice en escritorio: todos los enlaces y controles miden 40 px de alto como mínimo (petición del usuario,
+   2026-10-14). En pantalla completa (móvil) suben a 48 px, más abajo. */
+.indice .interruptor { min-height: 40px; }
+.acceso__enlace { min-height: 40px; }
+.acordeon--errores > .acordeon__titulo { min-height: 40px; }
+.lista-pantallas li a { display: flex; align-items: center; min-height: 40px; padding-top: 0; padding-bottom: 0; }
+.acceso__secuencia { min-height: 40px; }
+.acceso__chips a { min-height: 40px; min-width: 40px; justify-content: center; }
+
+/* Índice en pantalla completa (móvil): zonas táctiles de 48 px como mínimo y botones a todo el ancho
+   (petición del usuario, 2026-10-14). En escritorio se mantiene el índice recogido. */
+html.compacto .indice .interruptor { min-height: 48px; }
+html.compacto .indice .interruptores { gap: 0 24px; }
+html.compacto body.ver-indice .indice__volver { min-height: 48px; }
+html.compacto .acceso__enlace { min-height: 48px; font-size: 14px; }
+html.compacto .acordeon__titulo,
+html.compacto .acordeon--errores > .acordeon__titulo { min-height: 48px; font-size: 14px; }
+html.compacto .lista-pantallas li a { display: flex; align-items: center; min-height: 48px; font-size: 14px; }
+html.compacto .acceso__errores { grid-template-columns: 1fr; gap: 8px; padding: 0 0 12px 18px; }
+html.compacto .acceso__errores .acceso__grupo { margin-top: 4px; }
+html.compacto .acceso__secuencia {
+  justify-content: center; min-height: 48px; border: 1px solid var(--neutral-300);
+  text-decoration: none; font-weight: 600; font-size: 14px;
+}
+html.compacto .acceso__errores .acceso__chips { gap: 8px; }
+html.compacto .acceso__chips a { flex: 1 1 0; justify-content: center; min-width: 64px; min-height: 48px; font-size: 14px; }

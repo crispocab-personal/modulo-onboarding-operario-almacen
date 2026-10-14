@@ -18,6 +18,7 @@
     pantalla: 'smart:300',      // entre pantallas
     disolver: 'dissolve:300',
     abrir: 'dissolve:250',      // hojas, menú, diálogo y cámara
+    hoja: 'hoja:250',           // hoja sobre su propia pantalla: la de debajo no se mueve, el Overlay aparece y la hoja sube
     dentroSmart: 'smart:200',   // X del aviso
     dentroDisolver: 'dissolve:200', // X de la cámara
     instantaneo: 'instant:0'
@@ -260,7 +261,7 @@
       LinkButton({ texto: 'He olvidado mi contraseña', nd: true, figma: 'Link button · Clave olvidada' }) + '</div>' +
       '</div></div>' +
       '<div class="acciones">' +
-      ButtonCTA({ id: 'btn-no-puedo-entrar', texto: 'No puedo entrar', estilo: 'outlined', go: '02-pedir-dni', tr: TR.disolver }) +
+      ButtonCTA({ id: 'btn-no-puedo-entrar', texto: 'No puedo entrar', estilo: 'outlined', go: '02-pedir-dni', tr: TR.hoja }) +
       '<span class="solo-lector" id="requisito-entrar">Se activa al escribir los 8 números del DNI y la contraseña.</span>' +
       ButtonCTA({ id: 'btn-entrar', texto: 'Entrar', estilo: 'brand-dark', disabled: !ok, requisito: 'requisito-entrar', go: '03-bienvenida', tr: TR.disolver }) +
       '</div></div>';
@@ -271,10 +272,10 @@
       figma: 'No has podido entrar',
       titulo: 'No te preocupes, avisamos a tu responsable',
       texto: 'Le diremos que no has podido entrar para que gestione tu cuenta. Podrás seguir con la formación igualmente.',
-      cerrar: '01-iniciar-sesion', trCerrar: TR.disolver,
+      cerrar: '01-iniciar-sesion', trCerrar: TR.abrir,
       contenido: '<span class="solo-lector" id="requisito-avisar">Se activa al escribir los 8 números del DNI.</span>' + TextInput({ id: 'dni-hoja', campo: 'dniHoja', valor: v.dniHoja }),
       // «Volver a intentarlo» en Outlined (secundaria), por decisión del usuario (2026-10-05)
-      acciones: ButtonCTA({ texto: 'Volver a intentarlo', figma: 'Acción secundaria', estilo: 'outlined', go: '01-iniciar-sesion', tr: TR.disolver }) +
+      acciones: ButtonCTA({ texto: 'Volver a intentarlo', figma: 'Acción secundaria', estilo: 'outlined', go: '01-iniciar-sesion', tr: TR.abrir }) +
         ButtonCTA({ id: 'btn-avisar', texto: 'Avisar y continuar', figma: 'Acción principal', estilo: 'brand-dark', disabled: !/^\d{8}$/.test(v.dniHoja), requisito: 'requisito-avisar', go: '02-ya-avisado', tr: TR.disolver })
     });
   }
@@ -283,11 +284,11 @@
   def('01-iniciar-sesion-rellenado', '01 · Iniciar sesión / rellenado', 'Inicio de sesión', { html: function () { return pantallaLogin(true); } });
   def('02-pedir-dni', '02 · No has podido entrar / pedir DNI', 'Inicio de sesión', {
     html: function () { return pantallaLogin(false); }, capa: function () { return hojaNoPuedoEntrar(false); },
-    base: '01-iniciar-sesion', opener: '#btn-no-puedo-entrar', escape: '01-iniciar-sesion', escapeTr: TR.disolver
+    base: '01-iniciar-sesion', opener: '#btn-no-puedo-entrar', escape: '01-iniciar-sesion', escapeTr: TR.abrir
   });
   def('02-pedir-dni-rellenado', '02 · No has podido entrar / pedir DNI / rellenado', 'Inicio de sesión', {
     html: function () { return pantallaLogin(false); }, capa: function () { return hojaNoPuedoEntrar(true); },
-    base: '01-iniciar-sesion', opener: '#btn-no-puedo-entrar', escape: '01-iniciar-sesion', escapeTr: TR.disolver
+    base: '01-iniciar-sesion', opener: '#btn-no-puedo-entrar', escape: '01-iniciar-sesion', escapeTr: TR.abrir
   });
   def('02-ya-avisado', '02 · No has podido entrar / ya avisado', 'Inicio de sesión', {
     html: function () {
@@ -644,6 +645,16 @@
     var raiz = document.documentElement;
     if (tipo === 'instant' || dur === 0) { cambiar(); alTerminar(); return; }
     if (tipo === 'bloque') { pasoDeBloque(dur, cambiar, alTerminar); return; }
+    // Hoja que se abre sobre su pantalla (2026-10-14): sin fundido cruzado de todo el marco, que dejaba ver la
+    // pantalla de debajo a través de la hoja. Solo aparece el Overlay; la hoja sube con su animación (hoja--entrando).
+    if (tipo === 'hoja') {
+      cambiar();
+      var velo = marco.querySelector('dialog.capa .overlay');
+      if (!velo || !velo.animate) { alTerminar(); return; }
+      var f = velo.animate([{ opacity: 0 }, { opacity: 1 }], { duration: dur, easing: 'cubic-bezier(0, 0, 0.58, 1)' });
+      f.onfinish = f.oncancel = function () { alTerminar(); };
+      return;
+    }
     raiz.style.setProperty('--vt-dur', dur + 'ms');
     if (document.startViewTransition) {
       raiz.classList.toggle('vt-smart', tipo === 'smart');
